@@ -110,34 +110,99 @@ output or faculty review state changes.
 
 ## Architecture and data flow
 
-``` text
-Student reports + question bank + repair taxonomy
-                       |
-                       v
-                 run_triage.py
-          group reports by questionId
-                       |
-                       v
-                llm_adapter.py
-          prompt construction + Groq API
-                       |
-                       v
-             validate_suggestion(...)
-       schema / taxonomy / edit / route checks
-                       |
-                       v
-                results.json
-             one result per report
-                       |
-                       v
-                  app.py
-             FastAPI backend
-                       |
-             +---------+---------+
-             |                   |
-             v                   v
-       Faculty dashboard    SQLite review DB
-        static/index.html   case state + audit
+```mermaid
+
+
+flowchart TB
+
+    subgraph INPUT["1. INPUT DATA"]
+        direction LR
+        SR[("Student Reports")]
+        QB[("Question Bank")]
+        RT[("Repair Taxonomy")]
+    end
+
+    subgraph TRIAGE["2. AI-POWERED TRIAGE PIPELINE"]
+        direction TB
+
+        RUN["run_triage.py<br/>Triage Orchestrator"]
+
+        GROUP["Group reports by questionId"]
+
+        ADAPTER["llm_adapter.py"]
+
+        PROMPT["Prompt Construction<br/>System Prompt + Report Context"]
+
+        GROQ["Groq API<br/>LLM Inference"]
+
+        SUGGEST["AI-Generated Suggestions"]
+
+        VALIDATE["validate_suggestion()"]
+
+        subgraph CHECKS["VALIDATION CHECKS"]
+            direction LR
+            SCHEMA["Schema Validation"]
+            TAXONOMY["Taxonomy Validation"]
+            EDIT["Edit Validation"]
+            ROUTE["Route Validation"]
+        end
+
+        RESULT[("results.json<br/>One result per report")]
+
+        RUN --> GROUP
+        GROUP --> ADAPTER
+        ADAPTER --> PROMPT
+        PROMPT --> GROQ
+        GROQ --> SUGGEST
+        SUGGEST --> VALIDATE
+        VALIDATE --> SCHEMA
+        VALIDATE --> TAXONOMY
+        VALIDATE --> EDIT
+        VALIDATE --> ROUTE
+
+        SCHEMA --> RESULT
+        TAXONOMY --> RESULT
+        EDIT --> RESULT
+        ROUTE --> RESULT
+    end
+
+    subgraph REVIEW["3. FACULTY REVIEW APPLICATION"]
+        direction TB
+
+        API["app.py<br/>FastAPI Backend"]
+
+        DASH["Faculty Dashboard<br/>static/index.html"]
+
+        ACTIONS["Faculty Actions<br/>Approve · Reject · Edit · Reopen"]
+
+        DB[("SQLite Review Database")]
+
+        AUDIT["Case State & Audit History"]
+
+        API --> DASH
+        DASH --> ACTIONS
+        ACTIONS --> API
+        API <--> DB
+        DB --> AUDIT
+    end
+
+    SR --> RUN
+    QB --> RUN
+    RT --> RUN
+
+    RESULT --> API
+
+    style INPUT fill:#eaf3ff,stroke:#3978b8,color:#17365d
+    style TRIAGE fill:#f4efff,stroke:#8060b0,color:#39265c
+    style CHECKS fill:#fff7e8,stroke:#c18b36,color:#684817
+    style REVIEW fill:#eaf7f0,stroke:#39966a,color:#174d35
+
+    style GROQ fill:#fff0d9,stroke:#d69a36,color:#704600
+    style VALIDATE fill:#fce8e8,stroke:#c65b5b,color:#6d2020
+    style RESULT fill:#e2f5e9,stroke:#39966a,color:#174d35
+    style DB fill:#e9e6ff,stroke:#7565bd,color:#30245e
+
+
 ```
 
 **Important:** LLM triage is a batch-processing step. The dashboard
