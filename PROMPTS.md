@@ -1,8 +1,10 @@
 # PROMPTS.md — Acadza Report → Fix
 
-## 1. Prompts shipped inside the product (verbatim)
+## 1. Product prompts shipped with the application (verbatim)
 
-The current benchmark is run from a reviewed, deterministic `results.json` so it can load without an API key and remain reproducible. The optional live Gemini adapter uses the following two prompt files verbatim:
+The live triage adapter uses Groq's chat-completions API. The model defaults to
+`openai/gpt-oss-120b` and can be overridden with `GROQ_MODEL`. The two prompt
+files below are loaded directly by `llm_adapter.py`.
 
 ### `prompts/triage_system.txt`
 
@@ -53,26 +55,79 @@ STUDENT REPORTS FOR THIS QUESTION:
 Return the exact JSON object required by the system prompt. If the report cannot be resolved safely from this evidence, route it to faculty_review or no_change rather than guessing.
 ```
 
-## 2. Prompts used with the AI coding assistant
+The user template is populated with the supplied taxonomy, question record,
+and all student reports for that question. The system prompt and user prompt
+are sent as separate `system` and `user` messages. The request asks for JSON
+object output and uses temperature `0.1`.
 
-The key project-direction prompt from this build conversation, verbatim:
+## 2. Prompt iterations and decisions
+
+- The product prompt constrains the model to the supplied verdict and repair
+  taxonomy rather than allowing it to invent categories.
+- It treats student comments and question content as untrusted data to reduce
+  prompt-injection risk.
+- It requires narrow edits tied to exact source text and sends uncertain or
+  authored-content changes to faculty review.
+- It gives answer-key changes extra scrutiny: independent calculation and the
+  supplied solution must agree before an answer-key correction can be eligible
+  for automatic application.
+- The adapter validates the returned verdict, route, confidence, repair scope,
+  and edit target. Invalid or out-of-scope suggestions are not accepted.
+
+No earlier numbered prompt versions were retained as separate files in the
+submitted project, so this document does not invent a version history or claim
+that unrecorded prompt variants were tested.
+
+## 3. Prompts used with the AI coding assistant
+
+The following key project-direction prompt is preserved verbatim from the
+build conversation:
 
 > Let's approach the Acadza assignment. My preferred approach: full. LLM access: unsure. Help me execute it.
 
-The coding work was then directed by the assignment's supplied README and the explicit requirements to inspect the uploaded ZIP, preserve the production data format, create all 44 report decisions, and build a usable faculty console. No claim is made that an external coding agent or an LLM API generated the committed benchmark labels.
+The implementation was then guided by the assignment brief and follow-up
+requests to inspect the supplied project, implement the faculty workflow,
+validate the 44 report decisions, and correct the documentation. The complete
+verbatim history of every coding-assistant exchange is not present in the
+project files; only the preserved prompt above is quoted as verbatim. No
+additional prompts are fabricated here.
 
-## 3. Three model-reasoning failure modes caught during review
+## 4. Three failure modes identified during review
 
-1. **R034 — internally contradictory solution.** A superficial read could accept the stored D key because the solution concludes D. Recomputing `I = 2I₀ cos²(π/4) = I₀` shows Assertion A is true; Reason R is false; option C is correct. The solution text contradicts its own calculation. We route this to faculty review rather than silently repairing only half the inconsistency.
-2. **R021 — answer schema mistaken for question semantics.** The record is stored as `mcq` with `answer: ["", "B"]`, but the stem asks for one answer. A naive model may normalize the type and key without considering nested record migration. The case is held for faculty confirmation.
-3. **R027 — prompt injection in student text.** The comment explicitly asks the assistant to ignore prior instructions and change the answer. It is untrusted report content, not an instruction. The system rejects the request and leaves the question unchanged.
+1. **R034 — internally contradictory solution.** A superficial read could
+   accept the stored D key because the solution concludes D. Recomputing
+   `I = 2I₀ cos²(π/4) = I₀` shows Assertion A is true and Reason R is false;
+   option C is indicated. The inconsistency is held for faculty review rather
+   than silently changing only part of the item.
+2. **R021 — answer schema versus question semantics.** The record is stored as
+   `mcq` with `answer: ["", "B"]`, while the stem asks for one answer. A
+   mechanical normalization could change the data representation without
+   confirming the intended semantics. It is routed to faculty review.
+3. **R027 — prompt injection in student text.** The report comment asks the
+   assistant to ignore prior instructions and change the answer. Student text
+   is treated as untrusted evidence, not an instruction; the request does not
+   justify changing the question.
 
-## 4. Design decisions log
+These are review examples documented in the project. They should not be read
+as a claim that each one was a live Groq response captured in a model trace.
 
-- **Group before review, preserve reports.** Cases are grouped by question ID so faculty do not repeat the same investigation, while all 44 report IDs and comments remain visible.
-- **Fail closed on authored content.** Missing diagrams, duplicate distractors, un-restorable options, wrong chapter mappings, and syllabus disputes go to faculty. The engine does not invent educational content.
-- **Answer keys receive extra scrutiny.** The three simple key corrections in the benchmark have explicit calculations that agree with the stored working. The inconsistent R034 case remains faculty-only.
-- **No silent production mutation.** Approve/reject/edit-note actions are stored in a SQLite audit trail. This demo does not write to a live question bank.
-- **Native math rendering.** Question and solution HTML/MathML are rendered in script-disabled sandboxed iframes.
-- **Cost-aware fallback.** The submitted console loads committed `results.json` without a paid API. An optional Gemini adapter is available for live experiments; its output is schema- and scope-validated, and answer-key changes cannot auto-apply from model confidence alone.
-- **What was not used:** a single unconstrained LLM call that directly edits production fields. It is simpler to demo but unsafe, hard to audit, and vulnerable to prompt injection.
+## 5. Design decisions log
+
+- **Group before review:** reports are grouped by `questionId`; all original
+  report IDs and comments remain available to faculty.
+- **Fail closed on authored content:** missing diagrams, distractors, premises,
+  or uncertain syllabus decisions are not generated by the model; they require
+  faculty review.
+- **Answer keys receive extra scrutiny:** confidence alone is insufficient.
+  A correction needs an independent calculation and consistency with the
+  supplied solution.
+- **Human approval remains in control:** the dashboard records approve,
+  reject, edit, and reopen actions in SQLite. This demo does not mutate the
+  production question bank or send real student notifications.
+- **Native math rendering:** question and solution HTML/MathML are displayed
+  in script-disabled sandboxed iframes.
+- **Precomputed fallback:** the submitted console reads `results.json`, so the
+  faculty UI remains usable without spending API credits on every page load.
+- **Rejected approach:** a single unconstrained LLM call that directly edits
+  production question fields. It is difficult to audit and unsafe for
+  ambiguous educational content.
