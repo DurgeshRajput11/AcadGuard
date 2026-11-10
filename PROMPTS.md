@@ -71,8 +71,7 @@ object output and uses temperature `0.1`.
 - It gives answer-key changes extra scrutiny: independent calculation and the
   supplied solution must agree before an answer-key correction can be eligible
   for automatic application.
-- The adapter validates the returned verdict, route, confidence, repair scope,
-  and edit target. Invalid or out-of-scope suggestions are not accepted.
+- The adapter enforces the exact seven-key schema, rejects Boolean/non-finite confidence, validates repair scope and exact before-values, and downgrades unverifiable edits to faculty review. A code-level allowlist limits automatic routing to spelling, noise, exam-reference removal, and markup-leak cleanup at confidence >= 0.95. Taxonomy flags alone cannot expand this allowlist.
 
 No earlier numbered prompt versions were retained as separate files in the
 submitted project, so this document does not invent a version history or claim
@@ -131,3 +130,19 @@ as a claim that each one was a live Groq response captured in a model trace.
 - **Rejected approach:** a single unconstrained LLM call that directly edits
   production question fields. It is difficult to audit and unsafe for
   ambiguous educational content.
+
+
+## 6. Current implementation safeguards
+
+The code-level auto-apply allowlist contains only `spelling`, `noise`,
+`exam_reference`, and `markup_leak`, with exact source matching, the
+taxonomy auto flag, and confidence >= 0.95. Other repair categories are
+downgraded to faculty review. A missing edit cannot be auto-applied.
+Malformed schemas, Boolean/non-finite confidence values, and empty evidence
+or student replies are rejected. Faculty approval records a demo review
+decision; it does not publish to a production question bank.
+
+The canonical result file is `results.json`; `results.live.json` is an
+identical compatibility copy. The snapshot has 44 report records, 44 unique
+report IDs, and 39 question IDs: 5 auto-eligible, 21 faculty-review, and
+18 no-change. These are report-level counts.
