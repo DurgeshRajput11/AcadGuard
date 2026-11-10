@@ -120,163 +120,87 @@ def triage_with_groq(question, reports, taxonomy):
 
 
 def validate_suggestion(suggestion, question, taxonomy):
-    """
-    Fail-closed validation of AI suggestions.
+    """Strict, fail-closed validation of model-generated triage decisions."""
+    import math
 
-    Unsafe or unverifiable edits are discarded and routed
-    to faculty review instead of being automatically applied.
-    """
+    required = {
+        "verdict", "repair", "edit", "route",
+        "confidence", "evidence", "student_reply"
+    }
+    if not isinstance(suggestion, dict) or set(suggestion) != required:
+        raise ValueError("Suggestion must contain exactly the seven required keys")
 
-    verdicts = taxonomy["verdicts"]
-    repairs = taxonomy["repairs"]
-
-    if suggestion.get("verdict") not in verdicts:
-        raise ValueError("Unknown verdict")
-
+    verdicts = taxonomy.get("verdicts", {})
+    repairs = taxonomy.get("repairs", {})
+    verdict = suggestion.get("verdict")
     route = suggestion.get("route")
     confidence = suggestion.get("confidence")
 
+    if verdict not in verdicts:
+        raise ValueError("Unknown verdict")
     if (
-        not isinstance(confidence, (int, float))
+        isinstance(confidence, bool)
+        or not isinstance(confidence, (int, float))
+        or not math.isfinite(float(confidence))
         or not 0 <= confidence <= 1
     ):
-        raise ValueError(
-            "Confidence must be a number between 0 and 1"
-        )
-
-    if (
-        not isinstance(suggestion.get("evidence"), str)
-        or not isinstance(suggestion.get("student_reply"), str)
-    ):
-        raise ValueError(
-            "Evidence and student_reply must be strings"
-        )
-
-    if route not in {
-        "auto_apply",
-        "faculty_review",
-        "no_change"
-    }:
+        raise ValueError("Confidence must be a finite number between 0 and 1")
+    if route not in {"auto_apply", "faculty_review", "no_change"}:
         raise ValueError("Unknown route")
+    for key in ("evidence", "student_reply"):
+        if not isinstance(suggestion.get(key), str) or not suggestion[key].strip():
+            raise ValueError(f"{key} must be a non-empty string")
 
-    repair = suggestion.get("repair")
-    edit = suggestion.get("edit")
-
-    # Non-defects must never propose a mutation.
-    if suggestion["verdict"] != "defect":
-
-        if (
-            repair is not None
-            or edit is not None
-            or route != "no_change"
-        ):
-            raise ValueError(
-                "Non-defect must not propose a repair or mutation"
-            )
-
+    repair, edit = suggestion.get("repair"), suggestion.get("edit")
+    if verdict != "defect":
+        if repair is not None or edit is not None or route != "no_change":
+            raise ValueError("Non-defects require null repair/edit and no_change route")
         return suggestion
 
     if repair not in repairs:
         raise ValueError("Unknown repair")
-
+    rule = repairs[repair]
+    fields = rule.get("fields", [])
+    if not isinstance(fields, list):
+        raise ValueError("Repair fields must be a list")
     if route == "no_change":
-        raise ValueError(
-            "A defect cannot be routed as no_change"
-        )
+        raise ValueError("A defect cannot be routed as no_change")
 
-    if edit is not None and not isinstance(edit, dict):
-        raise ValueError(
-            "Edit must be an object or null"
-        )
+    if edit is None:
+        if route == "auto_apply":
+            suggestion["route"] = "faculty_review"
+        return suggestion
+    if not isinstance(edit, dict) or set(edit) != {"field", "find", "replace"}:
+        raise ValueError("Edit must contain exactly field, find, and replace")
+    field, before, after = edit["field"], edit["find"], edit["replace"]
+    if field not in fields:
+        raise ValueError("Edit field is outside the repair taxonomy scope")
+    if not isinstance(before, str) or not before:
+        raise ValueError("Edit before-value must be a non-empty string")
+    if isinstance(after, bool) or not isinstance(after, (str, int, float, list)):
+        raise ValueError("Replacement must be a string, number, or list")
+    if isinstance(after, list) and any(isinstance(x, (dict, list, bool)) for x in after):
+        raise ValueError("Replacement lists may contain only scalar values")
 
-    if edit and not repairs[repair]["fields"]:
-        raise ValueError(
-            "This repair type does not permit field edits"
-        )
+    record = question.get(question.get("questionType"), {})
+    if field in {"question", "solution"}:
+        if not isinstance(after, str):
+            raise ValueError("Question/solution replacements must be strings")
+        source = record.get(field, "")
+        if not isinstance(source, str) or before not in source:
+            suggestion["edit"] = None
+            suggestion["route"] = "faculty_review"
+            return suggestion
+    elif field == "answer":
+        if str(record.get("answer")) != before:
+            suggestion["edit"] = None
+            suggestion["route"] = "faculty_review"
+            return suggestion
 
-    if (
-        route == "auto_apply"
-        and not repairs[repair]["auto"]
+    # Only deterministic text-cleanup categories can remain automatic.
+    safe_auto = {"spelling", "noise", "exam_reference", "markup_leak"}
+    if route == "auto_apply" and (
+        repair not in safe_auto or rule.get("auto") is not True or confidence < 0.95
     ):
-        raise ValueError(
-            "Repair is not eligible for auto-apply"
-        )
-
-    if edit:
-
-        field = edit.get("field")
-
-        if field not in repairs[repair]["fields"]:
-            raise ValueError(
-                "Edit touches a field outside the repair scope"
-            )
-
-        if field in {"question", "solution"}:
-
-            body = question.get(
-                question.get("questionType"), {}
-            ).get(field, "")
-
-            if (
-                not isinstance(body, str)
-                or not isinstance(edit.get("find"), str)
-                or not edit["find"]
-                or edit["find"] not in body
-            ):
-                print(
-                    "WARNING: Exact source text mismatch. "
-                    "Discarding proposed edit and routing "
-                    "to faculty review."
-                )
-
-                suggestion["edit"] = None
-                suggestion["route"] = "faculty_review"
-                edit = None
-
-        elif field == "answer":
-
-            current = question.get(
-                question.get("questionType"), {}
-            ).get("answer")
-
-            if str(current) != str(edit.get("find")):
-
-                print(
-                    "WARNING: Answer before-value mismatch. "
-                    "Discarding proposed edit and routing "
-                    "to faculty review."
-                )
-
-                suggestion["edit"] = None
-                suggestion["route"] = "faculty_review"
-                edit = None
-
-        if edit and not isinstance(
-            edit.get("replace"),
-            (str, int, float, list)
-        ):
-            raise ValueError(
-                "Replacement must be a JSON scalar or list"
-            )
-
-    # Auto-apply requires a concrete, validated edit.
-    if (
-        suggestion["route"] == "auto_apply"
-        and not suggestion.get("edit")
-    ):
-        raise ValueError(
-            "Auto-apply requires a concrete, validated edit"
-        )
-
-    # Answer-key changes always require human review.
-    if (
-        repair == "answer_key"
-        and suggestion["route"] == "auto_apply"
-    ):
-        print(
-            "Answer-key change routed to faculty review."
-        )
-
         suggestion["route"] = "faculty_review"
-
     return suggestion
