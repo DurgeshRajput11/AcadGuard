@@ -538,9 +538,9 @@
       "find": "Then the frictional force is equal to",
       "replace": "Then the frictional force is equal to (in N)"
     },
-    "route": "auto_apply",
+    "route": "faculty_review",
     "confidence": 0.95,
     "evidence": "The question asks for a numerical frictional force but does not specify the unit (newtons). Taxonomy answer_form repair applies.",
-    "student_reply": "Thanks for reporting this. We identified a proposed correction and queued it for the approved correction workflow. The live question has not been changed yet."
+    "student_reply": "Thanks for reporting this. The missing-unit issue has been flagged for faculty review; the question has not been changed."
   }
 ]
