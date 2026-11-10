@@ -9,6 +9,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+import os
 
 ROOT = Path(__file__).parent
 DATA = ROOT / 'data'
@@ -19,7 +20,16 @@ questions = {
     for q in json.loads((DATA / 'questions.json').read_text(encoding='utf-8'))
 }
 reports = json.loads((DATA / 'reports.json').read_text(encoding='utf-8'))
-results = json.loads((ROOT / 'results.json').read_text(encoding='utf-8'))
+RESULTS_FILE = os.getenv("RESULTS_FILE", "results.live.json")
+RESULTS_PATH = ROOT / RESULTS_FILE
+
+if not RESULTS_PATH.exists():
+    raise FileNotFoundError(
+        f"{RESULTS_FILE} not found. "
+        "Set RESULTS_FILE to an available results JSON file."
+    )
+
+results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
 taxonomy = json.loads((DATA / 'taxonomy.json').read_text(encoding='utf-8'))
 result_by_id = {r['reportId']: r for r in results}
 report_by_id = {r['reportId']: r for r in reports}
@@ -87,6 +97,38 @@ def proposed_edit(q: dict, result: dict, override=None):
     return None
 
 
+ROUTE_PRIORITY = {
+    "no_change": 0,
+    "auto_apply": 1,
+    "faculty_review": 2,
+}
+
+
+def select_primary(items):
+    """Choose the safest report-level decision for a question group.
+
+    Faculty review takes precedence over auto-apply, regardless of confidence.
+    Answer-key changes are treated as faculty-review items even if an upstream
+    result incorrectly labels them auto_apply.
+    """
+    if not items:
+        raise ValueError("Cannot select a primary result from an empty group.")
+
+    def sort_key(item):
+        route = item.get("route")
+        if item.get("repair") == "answer_key" and route == "auto_apply":
+            route = "faculty_review"
+        return (
+            ROUTE_PRIORITY.get(route, ROUTE_PRIORITY["faculty_review"]),
+            item.get("confidence", 0),
+        )
+
+    primary = dict(max(items, key=sort_key))
+    if primary.get("repair") == "answer_key" and primary.get("route") == "auto_apply":
+        primary["route"] = "faculty_review"
+    return primary
+
+
 def get_case_groups():
     grouped = defaultdict(list)
     for report in reports:
@@ -97,7 +139,7 @@ def get_case_groups():
         if not q:
             continue
         items = [result_by_id[r['reportId']] for r in group]
-        primary = max(items, key=lambda x: (x['confidence'], x['route'] == 'faculty_review'))
+        primary = select_primary(items)
         state = None
         with connect() as con:
             state = con.execute('SELECT status, faculty_note, faculty_edit, updated_at FROM case_state WHERE question_id=?', (qid,)).fetchone()
@@ -173,7 +215,14 @@ def record_action(body: ActionBody):
     status = {'approve':'approved', 'reject':'rejected', 'edit':'edited', 'reopen':'pending'}[body.action]
     faculty_edit = None
     if body.action == 'edit' and body.editedValue is not None:
-        primary = next(result_by_id[r['reportId']] for r in reports_for_question)
+        question_results = [
+            result_by_id[r['reportId']]
+            for r in reports_for_question
+            if r['reportId'] in result_by_id
+        ]
+        if not question_results:
+            raise HTTPException(400, 'No triage results are available for this question')
+        primary = select_primary(question_results)
         allowed = taxonomy['repairs'].get(primary.get('repair'), {}).get('fields', [])
         if body.editField not in allowed:
             raise HTTPException(400, 'This repair does not permit editing that field')

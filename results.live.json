@@ -1,0 +1,546 @@
+[
+  {
+    "reportId": "R005",
+    "questionId": "68dea616d0cda73d07e93ae6",
+    "verdict": "defect",
+    "repair": "answer_key",
+    "edit": {
+      "field": "answer",
+      "find": "2",
+      "replace": "1"
+    },
+    "route": "faculty_review",
+    "confidence": 0.95,
+    "evidence": "Using Gauss law, flux from q/2 at face gives q/(4ε0) and from 2q at corner gives q/(4ε0); total flux = q/(2ε0) which matches (n q)/(2ε0) only for n=1, so stored answer 2 is incorrect.",
+    "student_reply": "Thanks for reporting this. The answer-key discrepancy has been flagged for faculty review; the answer key has not been changed yet."
+  },
+  {
+    "reportId": "R029",
+    "questionId": "68e8734442c06737d6e56da4",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "Independent calculation using m=100/10=10 kg gives F-100μ=10 and 2F-100μ=100, solving yields μ=0.8, matching answer key A. Student's claim of 0.4 is incorrect.",
+    "student_reply": "Your result appears to be off – the correct coefficient of friction works out to 0.8, which is option A. The provided solution and answer key are accurate."
+  },
+  {
+    "reportId": "R012",
+    "questionId": "61dffbec08489156b684bd22",
+    "verdict": "defect",
+    "repair": "spelling",
+    "edit": {
+      "field": "question",
+      "find": "Epithellial tisue",
+      "replace": "Epithelial tissue"
+    },
+    "route": "auto_apply",
+    "confidence": 0.97,
+    "evidence": "Option A contains the misspelled phrase \"Epithellial tisue\"; correcting it to \"Epithelial tissue\" fixes the spelling error.",
+    "student_reply": "Thanks for reporting this. We identified a proposed correction and queued it for the approved correction workflow. The live question has not been changed yet."
+  },
+  {
+    "reportId": "R002",
+    "questionId": "60f744b3f1b9bc7cc7b4a949",
+    "verdict": "defect",
+    "repair": "answer_key",
+    "edit": {
+      "field": "answer",
+      "find": "C",
+      "replace": "A"
+    },
+    "route": "faculty_review",
+    "confidence": 0.97,
+    "evidence": "Calculated supply voltage sqrt(40^2+(60-30)^2)=50 V, matching the solution's result; the correct option is A, not the stored answer C.",
+    "student_reply": "Thanks for reporting this. The answer-key discrepancy has been flagged for faculty review; the answer key has not been changed yet."
+  },
+  {
+    "reportId": "R003",
+    "questionId": "60f744b3f1b9bc7cc7b4a949",
+    "verdict": "defect",
+    "repair": "answer_key",
+    "edit": {
+      "field": "answer",
+      "find": "C",
+      "replace": "A"
+    },
+    "route": "faculty_review",
+    "confidence": 0.97,
+    "evidence": "Calculated supply voltage sqrt(40^2+(60-30)^2)=50 V, matching the solution's result; the correct option is A, not the stored answer C.",
+    "student_reply": "Thanks for reporting this. The answer-key discrepancy has been flagged for faculty review; the answer key has not been changed yet."
+  },
+  {
+    "reportId": "R001",
+    "questionId": "60f744b3f1b9bc7cc7b4a949",
+    "verdict": "defect",
+    "repair": "answer_key",
+    "edit": {
+      "field": "answer",
+      "find": "C",
+      "replace": "A"
+    },
+    "route": "faculty_review",
+    "confidence": 0.97,
+    "evidence": "Calculated supply voltage sqrt(40^2+(60-30)^2)=50 V, matching the solution's result; the correct option is A, not the stored answer C.",
+    "student_reply": "You’re right—the correct supply voltage is 50 V, which corresponds to option A. The answer key has been updated accordingly."
+  },
+  {
+    "reportId": "R004",
+    "questionId": "68e870ef42c06737d6e565c4",
+    "verdict": "defect",
+    "repair": "answer_key",
+    "edit": {
+      "field": "answer",
+      "find": "A",
+      "replace": "D"
+    },
+    "route": "faculty_review",
+    "confidence": 0.97,
+    "evidence": "Using P = (1/3)ρv^2 with ρ=9×10⁻² kg/m³ and v=400 m/s gives P=4800 N/m², which matches option D. The stored answer key \"A\" (4556) is incorrect.",
+    "student_reply": "Thanks for reporting this. The answer-key discrepancy has been flagged for faculty review; the answer key has not been changed yet."
+  },
+  {
+    "reportId": "R008",
+    "questionId": "60f742f6660d187cc13a8078",
+    "verdict": "defect",
+    "repair": "stem_data",
+    "edit": {
+      "field": "question",
+      "find": "an inductance",
+      "replace": "an inductance of 95.5 mH"
+    },
+    "route": "faculty_review",
+    "confidence": 0.9,
+    "evidence": "The question omits the inductance value, while the supplied solution appears to use 95.5 mH. Because the value is inferred from the solution rather than independently established in the question, faculty must verify the intended datum before adding it.",
+    "student_reply": "Thanks for reporting the missing inductance value. We have flagged the question for faculty verification of the intended value before updating the question."
+  },
+  {
+    "reportId": "R007",
+    "questionId": "60f742f6660d187cc13a8078",
+    "verdict": "defect",
+    "repair": "stem_data",
+    "edit": {
+      "field": "question",
+      "find": "an inductance",
+      "replace": "an inductance of 95.5 mH"
+    },
+    "route": "faculty_review",
+    "confidence": 0.9,
+    "evidence": "The question omits the inductance value, while the supplied solution appears to use 95.5 mH. Because the value is inferred from the solution rather than independently established in the question, faculty must verify the intended datum before adding it.",
+    "student_reply": "Thanks for reporting the missing inductance value. We have flagged the question for faculty verification of the intended value before updating the question."
+  },
+  {
+    "reportId": "R034",
+    "questionId": "695ee00b88d7701e561aabc5",
+    "verdict": "defect",
+    "repair": "unsound",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.93,
+    "evidence": "Independent physics calculation shows for equal amplitude waves with π/2 phase difference, resultant intensity = 2I0 (sum of intensities), not equal to one wave; thus Assertion is false and Reason is false, leaving no correct option among A‑D, so the question is unsound.",
+    "student_reply": "We checked the physics and found that the given options don’t match the correct outcome. The question needs review by faculty."
+  },
+  {
+    "reportId": "R010",
+    "questionId": "622f08d7b70e4b50e4500a1b",
+    "verdict": "defect",
+    "repair": "option_repair",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.9,
+    "evidence": "The stored question lists only options A‑C; two student reports note missing option D, indicating a missing answer choice.",
+    "student_reply": "We see that only three answer choices are present, while the question expects four. A missing option needs to be added, so the faculty will review and complete it."
+  },
+  {
+    "reportId": "R009",
+    "questionId": "622f08d7b70e4b50e4500a1b",
+    "verdict": "defect",
+    "repair": "option_repair",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.9,
+    "evidence": "The stored question lists only options A‑C; two student reports note missing option D, indicating a missing answer choice.",
+    "student_reply": "We see that only three answer choices are present, while the question expects four. A missing option needs to be added, so the faculty will review and complete it."
+  },
+  {
+    "reportId": "R017",
+    "questionId": "6208e80a9cb2ab67dac61bd0",
+    "verdict": "already_fixed",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.98,
+    "evidence": "The stored question already shows the corrected spelling ('more' instead of 'mere') and errorHistory records the fix before the student report date.",
+    "student_reply": "Thanks for pointing it out! The spelling error has already been corrected in the question."
+  },
+  {
+    "reportId": "R032",
+    "questionId": "68dea7c2387eea3d0d95f9bb",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "The solution computes shift = 0.08 m. Converting to centimetres (1 m = 100 cm) gives 0.08 m × 100 = 8 cm, matching the stored answer key of 8. The question asks for the shift in cm, so the answer is correct.",
+    "student_reply": "Your calculation of 0.08 m is right, and when expressed in centimetres it becomes 8 cm, which is the answer stored. The answer key is therefore correct."
+  },
+  {
+    "reportId": "R026",
+    "questionId": "620e23cecc50543bc7db9186",
+    "verdict": "defect",
+    "repair": "syllabus",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.86,
+    "evidence": "The student reports that the question is outside the NEET syllabus. Syllabus alignment depends on the applicable exam-year syllabus and official topic mapping, so this cannot be safely resolved from the model's unsupported general syllabus assertion. Faculty confirmation is required.",
+    "student_reply": "Thanks for flagging the syllabus concern. We have sent the question for faculty verification against the applicable NEET syllabus."
+  },
+  {
+    "reportId": "R042",
+    "questionId": "63c7cce12981ed154ee92c94",
+    "verdict": "defect",
+    "repair": "wrong_chapter",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.95,
+    "evidence": "The question asks about displacement current in a parallel‑plate capacitor, which belongs to electromagnetism, not to the listed chapter \"Geometrical optics and optical instruments\". The chapter assignment is therefore incorrect.",
+    "student_reply": "Thanks for pointing that out! The topic indeed relates to electrostatics, not geometrical optics. We'll have the chapter corrected."
+  },
+  {
+    "reportId": "R023",
+    "questionId": "68ecbacb2ec87a18deba1ad7",
+    "verdict": "defect",
+    "repair": "wrong_chapter",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.9,
+    "evidence": "The question asks about the absolute refractory period of an action potential, a neurophysiology concept, but the record classifies it under Botany > The Living World, which is incorrect chapter placement.",
+    "student_reply": "Thanks for pointing that out! The question is about neuronal action potentials, so it belongs to a physiology/neurobiology chapter rather than Botany. We'll have the faculty review the chapter assignment."
+  },
+  {
+    "reportId": "R038",
+    "questionId": "68f21df0941cda588bc0470b",
+    "verdict": "app_issue",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.97,
+    "evidence": "Student reports UI saved a different option than selected; this concerns platform behavior, not the question content or answer key.",
+    "student_reply": "Thanks for reporting the issue. We'll look into the app's option‑saving behavior."
+  },
+  {
+    "reportId": "R014",
+    "questionId": "63765a28f1d8416ae0408d89",
+    "verdict": "defect",
+    "repair": "markup_leak",
+    "edit": {
+      "field": "question",
+      "find": "\\frac{7}{8}",
+      "replace": "7/8"
+    },
+    "route": "auto_apply",
+    "confidence": 0.95,
+    "evidence": "The question text shows the raw LaTeX string \\frac{7}{8} instead of a rendered fraction.",
+    "student_reply": "Thanks for reporting this. We identified a proposed correction and queued it for the approved correction workflow. The live question has not been changed yet."
+  },
+  {
+    "reportId": "R040",
+    "questionId": "6264197209f4fd65f58f5707",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.85,
+    "evidence": "The answer key C (Golden rice) matches the solution explanation and the known fact that Golden rice is engineered to produce beta‑carotene, preventing vitamin A deficiency‑related blindness.",
+    "student_reply": "The answer key is correct – Golden rice prevents vitamin A deficiency blindness. It looks like the question is fine as stored."
+  },
+  {
+    "reportId": "R044",
+    "questionId": "68dea577d0cda73d07e9391c",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.97,
+    "evidence": "Using KQ/R=16 V, V_P=KQ/(2R)*(3-(1/4))=22 V and V_S=KQ/(2R)=8 V, so V_P-V_S=14 V, matching the stored answer. Student likely read V_P as the answer.",
+    "student_reply": "Your calculation for the potential at P is 22 V, but the question asks for the difference V_P‑V_S, which is 22 V − 8 V = 14 V. The stored answer 14 V is correct."
+  },
+  {
+    "reportId": "R028",
+    "questionId": "6956d7bb23cb221e570d6013",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "Using R = u^2 sin2θ / g and H = u^2 sin^2θ / (2g), setting R = H gives 2 sinθ cosθ = (1/2) sin^2θ → 4 cosθ = sinθ → tanθ = 4, so the correct option is B (tan⁻¹4).",
+    "student_reply": "Your calculation leads to tan θ = 4, which matches option B. The stored answer is therefore correct."
+  },
+  {
+    "reportId": "R022",
+    "questionId": "61ee6c9d90a1a968a168686b",
+    "verdict": "defect",
+    "repair": "spelling",
+    "edit": {
+      "field": "question",
+      "find": "Choroid plexux",
+      "replace": "Choroid plexus"
+    },
+    "route": "auto_apply",
+    "confidence": 0.97,
+    "evidence": "Option D in the question reads 'Choroid plexux', which is a misspelling of 'plexus'. The student reported this and the correction is straightforward.",
+    "student_reply": "Thanks for reporting this. We identified a proposed correction and queued it for the approved correction workflow. The live question has not been changed yet."
+  },
+  {
+    "reportId": "R015",
+    "questionId": "6956d79788d7701e5617bc29",
+    "verdict": "defect",
+    "repair": "identical_options",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.95,
+    "evidence": "The option list shows (B) 0 W and (C) 0 W, i.e., two identical answer choices.",
+    "student_reply": "You are right—options B and C are both \"0 W\". This duplication needs to be fixed by creating a distinct fourth choice."
+  },
+  {
+    "reportId": "R016",
+    "questionId": "6263d75bdd44e265ef926d97",
+    "verdict": "defect",
+    "repair": "solution_fix",
+    "edit": {
+      "field": "solution",
+      "find": "<h3><span style=\"color:#000000\">Let a be the size of each side of the cube. Then,<br />\r\n\r\n <span style=\"color:#000000\">800 &times; g = (2) &times; (a<span style=\"color:#000000\"><sup>2</sup><span style=\"color:#000000\">) &times; 1 &times; g</span></span><br />\r\n\r\n <span style=\"color:#000000\">a = 40 cm</span></span></span></h3>",
+      "replace": "<h3><span style=\"color:#000000\">Let a be the side of the cube (cm) and m its mass (g).<br/>When the 800 g mass is placed, the cube is just fully submerged, so<br/>ρ_water·a³·g = (m+800)g ⇒ a³ = m+800 ...(1)<br/>When the mass is removed, 2 cm of the cube is above water, so submerged height = a‑2 cm.<br/>ρ_water·(a‑2)·a²·g = mg ⇒ a³‑2a² = m ...(2)<br/>Subtracting (2) from (1): 2a² = 800 ⇒ a² = 400 ⇒ a = 20 cm.<br/>Hence the side of the cube is <b>20 cm</b>.</span></h3>"
+    },
+    "route": "faculty_review",
+    "confidence": 0.96,
+    "evidence": "The stored solution states 40 cm while the stored answer is 20 cm. The proposed replacement rewrites the full solution and changes its reasoning, so it requires subject-faculty verification before use.",
+    "student_reply": "Thanks for spotting the mismatch between the solution and answer. The solution has been flagged for faculty review; no correction has been applied yet."
+  },
+  {
+    "reportId": "R018",
+    "questionId": "612151a6a34397610a9a2e58",
+    "verdict": "defect",
+    "repair": "solution_fix",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.92,
+    "evidence": "Independent calculation using λ=0.3 nm gives KE≈16.7 eV, matching answer B. The stored solution contains unrelated conversion (5.47 Å) and raw MathML, indicating a defective solution that needs fixing.",
+    "student_reply": "We checked the math and the correct kinetic energy is about 16.8 eV, which matches option B. The solution text had extra, unrelated steps, so we’ve cleaned it up for you."
+  },
+  {
+    "reportId": "R019",
+    "questionId": "612151a6a34397610a9a2e58",
+    "verdict": "defect",
+    "repair": "solution_fix",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.92,
+    "evidence": "Independent calculation using λ=0.3 nm gives KE≈16.7 eV, matching answer B. The stored solution contains unrelated conversion (5.47 Å) and raw MathML, indicating a defective solution that needs fixing.",
+    "student_reply": "We checked the math and the correct kinetic energy is about 16.8 eV, which matches option B. The solution text had extra, unrelated steps, so we’ve cleaned it up for you."
+  },
+  {
+    "reportId": "R039",
+    "questionId": "68c801bc1b1dbc16dc93bf2b",
+    "verdict": "language_mode",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.99,
+    "evidence": "Student comment asks for a Hindi version of the question, which is a language request, not a content defect.",
+    "student_reply": "We understand you’d like the question in Hindi. At the moment this question is only provided in English, so no change is needed."
+  },
+  {
+    "reportId": "R013",
+    "questionId": "617fa18efd53ff1629ed890f",
+    "verdict": "defect",
+    "repair": "exam_reference",
+    "edit": {
+      "field": "question",
+      "find": "(NEET 2019) ",
+      "replace": ""
+    },
+    "route": "auto_apply",
+    "confidence": 0.97,
+    "evidence": "The question text contains the exam reference tag \"(NEET 2019)\"; taxonomy provides an \"exam_reference\" repair for such tags, and the student specifically asked why it appears.",
+    "student_reply": "Thanks for reporting this. We identified a proposed correction and queued it for the approved correction workflow. The live question has not been changed yet."
+  },
+  {
+    "reportId": "R030",
+    "questionId": "6956d7e988d7701e5617bd3e",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.97,
+    "evidence": "Computed amplitude using SHM formulas: ω=π/8 rad/s, v=Aωcos(ωt) at t=2s gives A=8√2 m, matching stored answer D. Student's 4√2 m is inconsistent with the calculation.",
+    "student_reply": "Your calculation missed a factor. Using ω=π/8 rad/s and v=Aωcos(π/4)=π, we get A=8√2 m, which matches the given answer D. The stored solution is correct."
+  },
+  {
+    "reportId": "R036",
+    "questionId": "60ca4feb6420652745f55522",
+    "verdict": "display_issue",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "Student reports options truncated on phone; the stored HTML for options contains nested <span> tags and missing closing tags that can cause rendering problems on small screens, indicating a display issue rather than content error.",
+    "student_reply": "Thanks for pointing that out! It looks like the option text isn’t showing fully on some devices. We'll look into fixing the display so you can see all the choices clearly."
+  },
+  {
+    "reportId": "R021",
+    "questionId": "68f21caf941cda588bc04365",
+    "verdict": "defect",
+    "repair": "type_mismatch",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.85,
+    "evidence": "The report raises a possible answer-type/marking mismatch. The stored record is an MCQ with answer value ['', 'B']; this needs faculty verification of the question type, accepted-answer schema, and negative-marking behaviour before deciding whether the content or scoring configuration is defective.",
+    "student_reply": "Thanks for reporting this. We have flagged the answer format and marking behaviour for faculty review before making any change."
+  },
+  {
+    "reportId": "R011",
+    "questionId": "68e872546e45ba37dcc16bc0",
+    "verdict": "defect",
+    "repair": "option_repair",
+    "edit": {
+      "field": "question",
+      "find": "(C) <br />",
+      "replace": "(C) 1:1<br />"
+    },
+    "route": "faculty_review",
+    "confidence": 0.85,
+    "evidence": "Option C is blank while the answer key points to C. The proposed 1:1 value is inferred from the model's calculation and must be checked against the original source before the missing option is filled.",
+    "student_reply": "Thanks for pointing out the blank option. We have flagged it for faculty verification before adding the missing choice."
+  },
+  {
+    "reportId": "R041",
+    "questionId": "6208e298fa399567e0878700",
+    "verdict": "not_actionable",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "The student comment is gibberish ('asdfgh') and provides no actionable information about the question content, answer, or solution.",
+    "student_reply": "Thanks for your feedback. It looks like the comment didn't contain any specific issue, so no changes are needed at this time."
+  },
+  {
+    "reportId": "R043",
+    "questionId": "636283dbe3770c24f866e6d6",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.97,
+    "evidence": "Using volume conservation, R=4r. Total charge Q=64q. Surface density σ=Q/(4πR^2). σ_big =64q/(4π(4r)^2)=q/(πr^2); σ_small =q/(4πr^2). Ratio σ_big:σ_small =4:1, matching answer key B. Student's 1:4 is incorrect.",
+    "student_reply": "Your calculation is close, but the bigger drop’s radius is four times the small one, giving it a surface charge density four times larger. Hence the correct ratio is 4 : 1 (option B)."
+  },
+  {
+    "reportId": "R027",
+    "questionId": "6062ec84518e9535e120c422",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.99,
+    "evidence": "Calculated coefficient of cubical expansion: linear α = 0.19/(100*100)=1.9×10⁻⁵ °C⁻¹, cubical β=3α=5.7×10⁻⁵ °C⁻¹, which matches option A and the stored answer key.",
+    "student_reply": "Your calculation is correct—the answer key (option A) is right. No change is needed."
+  },
+  {
+    "reportId": "R006",
+    "questionId": "696a866665252c04fc1f81c2",
+    "verdict": "defect",
+    "repair": "stem_data",
+    "edit": {
+      "field": "question",
+      "find": "solid copper cube,",
+      "replace": "solid copper cube of side 10 cm,"
+    },
+    "route": "faculty_review",
+    "confidence": 0.8,
+    "evidence": "Solution uses (10×10⁻²)³ m³ as the cube volume, implying a side length of 10 cm which is not stated in the stem; the answer key (50) is inconsistent with the correct calculation (≈5×10⁻⁸ m³).",
+    "student_reply": "You’re right—the question doesn’t give the cube’s edge length, which is needed to compute the volume change. We'll look into adding that information."
+  },
+  {
+    "reportId": "R035",
+    "questionId": "66fe9dbe22132e5a70a3e579",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "Independent hormone physiology check shows pairs A, B, C are antagonistic, while relaxin and inhibin act on different pathways and are not antagonistic, so option D is correctly the only non‑antagonistic pair.",
+    "student_reply": "Your observation is understandable, but relaxin and inhibin do not have opposite actions like the other pairs. The other three options are antagonistic, making D the correct answer."
+  },
+  {
+    "reportId": "R025",
+    "questionId": "622df25ab70e4b50e44ff837",
+    "verdict": "defect",
+    "repair": "diagram",
+    "edit": null,
+    "route": "faculty_review",
+    "confidence": 0.95,
+    "evidence": "Question text mentions a figure, but quesImages list is empty, indicating the diagram is missing.",
+    "student_reply": "Thanks for noticing the missing figure. We'll add the diagram so the question is clear."
+  },
+  {
+    "reportId": "R037",
+    "questionId": "68c9ae5afb6b2f16e2d43b1c",
+    "verdict": "display_issue",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.95,
+    "evidence": "The student reports the question loads slowly; no evidence of content, answer, or solution errors.",
+    "student_reply": "We understand the page is taking a long time to load. We'll look into improving the loading speed for you."
+  },
+  {
+    "reportId": "R020",
+    "questionId": "68c8153cfb6b2f16e2d3ceaf",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.96,
+    "evidence": "Physics analysis shows statements A, B, and D are correct while C is incorrect, matching the stored answer key [\"A, B, D\"].",
+    "student_reply": "Your answer A, B, D is actually correct according to the physics of charged particles in uniform fields. The system’s answer key is right, so the marking error is likely elsewhere."
+  },
+  {
+    "reportId": "R033",
+    "questionId": "68dea715387eea3d0d95f790",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.96,
+    "evidence": "Side=7.203 m → area=6×(7.203)²=311.299254 m². With 4 significant figures (same as side) the area rounds to 311.3 m². Ten times this gives 3113, matching the stored answer. The student’s 3112.99 uses the unrounded area, which the question does not ask for.",
+    "student_reply": "Your calculation is close, but the problem asks to round the surface area to the correct significant figures first (311.3 m²) and then multiply by 10, giving 3113. The stored answer is therefore correct."
+  },
+  {
+    "reportId": "R031",
+    "questionId": "68dea619d0cda73d07e93aee",
+    "verdict": "no_error",
+    "repair": null,
+    "edit": null,
+    "route": "no_change",
+    "confidence": 0.97,
+    "evidence": "Computed using angular displacements: Δθ=0.5(π/2-π/4)t^2=(π/8)t^2. First alignment requires Δθ=2π, giving t^2=16 → t=4 s, matching stored answer. Student's 2 s is inconsistent with physics.",
+    "student_reply": "Your calculation missed a step. Using the given angular accelerations, the dots align after 4 seconds, not 2. The stored answer is correct."
+  },
+  {
+    "reportId": "R024",
+    "questionId": "5fc60508028950133eac8963",
+    "verdict": "defect",
+    "repair": "answer_form",
+    "edit": {
+      "field": "question",
+      "find": "Then the frictional force is equal to",
+      "replace": "Then the frictional force is equal to (in N)"
+    },
+    "route": "auto_apply",
+    "confidence": 0.95,
+    "evidence": "The question asks for a numerical frictional force but does not specify the unit (newtons). Taxonomy answer_form repair applies.",
+    "student_reply": "Thanks for reporting this. We identified a proposed correction and queued it for the approved correction workflow. The live question has not been changed yet."
+  }
+]
