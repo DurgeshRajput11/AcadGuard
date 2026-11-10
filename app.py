@@ -20,7 +20,7 @@ questions = {
     for q in json.loads((DATA / 'questions.json').read_text(encoding='utf-8'))
 }
 reports = json.loads((DATA / 'reports.json').read_text(encoding='utf-8'))
-RESULTS_FILE = os.getenv("RESULTS_FILE", "results.live.json")
+RESULTS_FILE = os.getenv("RESULTS_FILE", "results.json")
 RESULTS_PATH = ROOT / RESULTS_FILE
 
 if not RESULTS_PATH.exists():
