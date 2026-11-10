@@ -76,7 +76,8 @@ should:
     without making a model request on every page refresh.
 
 The configured default model in the adapter is `openai/gpt-oss-120b`
-through the Groq API.
+through the Groq API. The submitted `results.json` is a precomputed, reviewed
+benchmark output; opening the dashboard does not make a model request.
 
 ### Faculty review workspace
 
@@ -125,7 +126,7 @@ Student reports + question bank + repair taxonomy
        schema / taxonomy / edit / route checks
                        |
                        v
-                results.live.json
+                results.json
              one result per report
                        |
                        v
@@ -140,7 +141,7 @@ Student reports + question bank + repair taxonomy
 ```
 
 **Important:** LLM triage is a batch-processing step. The dashboard
-reads the generated `results.live.json` file; opening or refreshing the
+reads the generated `results.json` file; opening or refreshing the
 dashboard does not, by itself, call Groq again. Run the triage command
 when you want to generate a new set of model decisions.
 
@@ -164,7 +165,7 @@ AcadGuard/
 ├── app.py                         # FastAPI app, API routes, review state and audit log
 ├── llm_adapter.py                 # Groq integration and suggestion validation
 ├── run_triage.py                  # Grouped live triage runner
-├── results.live.json              # Generated triage decisions loaded by the dashboard
+├── results.json              # Generated triage decisions loaded by the dashboard
 ├── requirements.txt               # Python dependencies
 ├── render.yaml                    # Render deployment configuration
 ├── data/
@@ -236,7 +237,7 @@ Do not commit API keys, `.env` files, or other secrets to Git.
 
 ### 5. Start the dashboard
 
-Make sure `results.live.json` exists in the project root. Then run:
+Make sure `results.json` exists in the project root. Then run:
 
 ``` bash
 uvicorn app:app --reload
@@ -247,13 +248,13 @@ Open:
 -   Dashboard: http://127.0.0.1:8000/
 -   Health check: http://127.0.0.1:8000/health
 
-The application uses `results.live.json` by default. To load a different
+The application uses `results.json` by default. To load a different
 results file, set `RESULTS_FILE` before starting the server.
 
 **PowerShell example:**
 
 ``` powershell
-$env:RESULTS_FILE="results.live.json"
+$env:RESULTS_FILE="results.json"
 uvicorn app:app --reload
 ```
 
@@ -263,7 +264,7 @@ The triage runner sends one grouped request per unique question and
 writes report-level decisions to the output JSON.
 
 ``` bash
-python run_triage.py --live --output results.live.json
+python run_triage.py --live --output results.json
 ```
 
 Useful behavior:
@@ -292,7 +293,7 @@ page load.
 
   `RESULTS_FILE`                      Results JSON file loaded by
                                       FastAPI; defaults to
-                                      `results.live.json`
+                                      `results.json`
   -----------------------------------------------------------------------
 
 Keep secrets in your local environment or the hosting provider's
@@ -398,11 +399,11 @@ For a deployed service:
 2.  Configure `GROQ_API_KEY` in the service's **Environment** settings
     if live triage will be run in that environment.
 3.  Ensure the deployed service has the required data files and
-    `results.live.json`.
+    `results.json`.
 4.  Deploy and check the service's `/health` endpoint.
 5.  Open the dashboard and verify the review queue and case details.
 
-The dashboard can serve an already generated `results.live.json` without
+The dashboard can serve an already generated `results.json` without
 making a Groq call on every request. If you want to regenerate triage in
 production, run the triage job in an environment where the Groq key and
 input data are available, then deploy or otherwise provide the resulting
@@ -436,7 +437,7 @@ Set the environment variable in the same terminal/session used to run
 `run_triage.py`, or configure it in the hosting provider's environment
 settings.
 
-### `results.live.json` not found
+### `results.json` not found
 
 Run the triage pipeline to generate it, or set `RESULTS_FILE` to the
 name of an existing results JSON file in the project root.
