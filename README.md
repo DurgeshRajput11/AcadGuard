@@ -14,8 +14,9 @@ the result for faculty review.
 
 > **Prototype scope:** This is a faculty-supervised demo. Approve,
 > Reject, Edit, and Reopen actions update the prototype's SQLite review
-> state and audit log. They do not modify Acadza's production question
-> bank or send notifications to students.
+> state and audit log. Approval records a faculty decision; it does not publish
+> a correction. Edits are stored as review proposals. The demo does not modify
+> Acadza's production question bank or send real student notifications.
 
 ------------------------------------------------------------------------
 
@@ -76,8 +77,7 @@ should:
     without making a model request on every page refresh.
 
 The configured default model in the adapter is `openai/gpt-oss-120b`
-through the Groq API. The submitted `results.json` is a precomputed, reviewed
-benchmark output; opening the dashboard does not make a model request.
+through the Groq API. The canonical `results.json` is a precomputed benchmark snapshot; `results.live.json` is maintained as an identical compatibility copy. Opening the dashboard does not make a model request.
 
 ### Faculty review workspace
 
@@ -104,9 +104,7 @@ The web dashboard provides:
 
 ### Current benchmark snapshot
 
-The included live triage output contains **44 report decisions across 39
-unique questions**. The exact route counts can change if the triage
-output or faculty review state changes.
+The canonical `results.json` contains **44 report-level decisions across 39 unique questions**: **5 auto-eligible**, **21 faculty-review**, and **18 no-change**. These are report-level counts, not dashboard question-card counts. `results.live.json` is an identical compatibility copy.
 
 ## Architecture and data flow
 
